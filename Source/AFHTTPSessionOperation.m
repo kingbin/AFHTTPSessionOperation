@@ -34,7 +34,6 @@
                           HTTPMethod:(NSString *)method
                            URLString:(NSString *)URLString
                           parameters:(id)parameters
-           constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
                       uploadProgress:(void (^)(NSProgress *uploadProgress)) uploadProgress
                     downloadProgress:(void (^)(NSProgress *downloadProgress)) downloadProgress
                              success:(void (^)(NSURLSessionDataTask *, id))success
@@ -42,7 +41,33 @@
 
     AFHTTPSessionOperation *operation = [[self alloc] init];
 
-    NSURLSessionTask *task = [manager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock  uploadProgress:uploadProgress downloadProgress:downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
+    NSURLSessionTask *task = [manager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters  uploadProgress:uploadProgress downloadProgress:downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
+        if (success) {
+            success(task, responseObject);
+        }
+        [operation completeOperation];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failure) {
+            failure(task, error);
+        }
+        [operation completeOperation];
+    }];
+
+    operation.task = task;
+
+    return operation;
+}
++ (instancetype)operationWithPOSTManager:(AFHTTPSessionManager *)manager
+                           POST:(NSString *)URLString
+                          parameters:(id)parameters
+           constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
+                      progress:(void (^)(NSProgress *uploadProgress)) progress
+                             success:(void (^)(NSURLSessionDataTask *, id))success
+                             failure:(void (^)(NSURLSessionDataTask *, NSError *))failure {
+
+    AFHTTPSessionOperation *operation = [[self alloc] init];
+
+    NSURLSessionTask *task = [manager POST:URLString parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock progress:progress success:^(NSURLSessionDataTask *task, id responseObject){
         if (success) {
             success(task, responseObject);
         }

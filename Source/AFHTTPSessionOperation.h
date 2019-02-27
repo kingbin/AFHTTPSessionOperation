@@ -6,6 +6,7 @@
 //
 
 #import "AsynchronousOperation.h"
+#import "AFURLSessionManager.h"
 
 @class AFHTTPSessionManager;
 
@@ -34,12 +35,18 @@ NS_ASSUME_NONNULL_BEGIN
                           HTTPMethod:(NSString *)HTTPMethod
                            URLString:(NSString *)URLString
                           parameters:(nullable id)parameters
-           constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                              success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
                              failure:(nullable void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
++ (instancetype)operationWithPOSTManager:(AFHTTPSessionManager *)manager
+                                    POST:(NSString *)URLString
+                              parameters:(id)parameters
+               constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
+                                progress:(void (^)(NSProgress *uploadProgress)) progress
+                                 success:(void (^)(NSURLSessionDataTask *, id))success
+                                 failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 @end
 
 NS_ASSUME_NONNULL_END
