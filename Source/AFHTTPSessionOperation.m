@@ -34,14 +34,15 @@
                           HTTPMethod:(NSString *)method
                            URLString:(NSString *)URLString
                           parameters:(id)parameters
+           constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
                       uploadProgress:(void (^)(NSProgress *uploadProgress)) uploadProgress
                     downloadProgress:(void (^)(NSProgress *downloadProgress)) downloadProgress
                              success:(void (^)(NSURLSessionDataTask *, id))success
                              failure:(void (^)(NSURLSessionDataTask *, NSError *))failure {
 
     AFHTTPSessionOperation *operation = [[self alloc] init];
-    
-    NSURLSessionTask *task = [manager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters uploadProgress:uploadProgress downloadProgress:downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
+
+    NSURLSessionTask *task = [manager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters constructingBodyWithBlock:constructingBodyWithBlock  uploadProgress:uploadProgress downloadProgress:downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
         if (success) {
             success(task, responseObject);
         }

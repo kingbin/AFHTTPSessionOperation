@@ -34,6 +34,7 @@ NS_ASSUME_NONNULL_BEGIN
                           HTTPMethod:(NSString *)HTTPMethod
                            URLString:(NSString *)URLString
                           parameters:(nullable id)parameters
+           constructingBodyWithBlock:(nullable void (^)(id <AFMultipartFormData> formData)) constructingBodyWithBlock
                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                              success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
